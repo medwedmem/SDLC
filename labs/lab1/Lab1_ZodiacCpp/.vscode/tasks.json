@@ -1,0 +1,27 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Сборка (g++)",
+            "type": "cppbuild",
+            "command": "g++",
+            "args": [
+                "-std=c++17",
+                "-g",
+                "-Wall",
+                "-municode",
+                "-mwindows",
+                "${workspaceFolder}/src/main.cpp",
+                "${workspaceFolder}/src/model/ZodiacModel.cpp",
+                "${workspaceFolder}/src/view/MainWindow.cpp",
+                "${workspaceFolder}/src/view/InputDialog.cpp",
+                "${workspaceFolder}/src/controller/ZodiacController.cpp",
+                "-o",
+                "${workspaceFolder}/build/Zodiac.exe"
+            ],
+            "options": { "cwd": "${workspaceFolder}" },
+            "problemMatcher": ["$gcc"],
+            "group": { "kind": "build", "isDefault": true }
+        }
+    ]
+}

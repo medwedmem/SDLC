@@ -1,0 +1,55 @@
+@startuml
+!pragma layout smetana
+skinparam classAttributeIconSize 0
+
+package model {
+  class ZodiacSign <<struct>> {
+    +name: wstring
+    +startDay, startMonth: int
+    +endDay, endMonth: int
+    +element: wstring
+    +planet: wstring
+    +description: wstring
+  }
+  interface IModelListener {
+    +modelChanged(model: const ZodiacModel&)
+  }
+  class ZodiacModel {
+    -listeners_: vector<IModelListener*>
+    -day_, month_, year_: int
+    -signIndex_: int
+    +addListener(l: IModelListener*)
+    +setBirthDate(day: int, month: int, year: int)
+    +sign(): const ZodiacSign&
+    +{static} daysInMonth(month: int, year: int): int
+    -{static} findSign(day: int, month: int): int
+    -fireModelChanged()
+  }
+}
+
+package view {
+  class MainWindow {
+    -lastInput_: optional<InputData>
+    +setInputAction(action: function<void()>)
+    +showError(message: wstring)
+    +modelChanged(model: const ZodiacModel&)
+  }
+  class InputDialog {
+    +{static} show(owner, initial): optional<InputData>
+  }
+}
+
+package controller {
+  class ZodiacController {
+    -onInputData()
+    +{static} parseNumber(text: wstring, field: char*): int
+  }
+}
+
+ZodiacModel o-- "*" IModelListener
+ZodiacModel ..> ZodiacSign : определяет
+MainWindow ..|> IModelListener
+ZodiacController --> ZodiacModel : изменяет
+ZodiacController --> MainWindow
+ZodiacController ..> InputDialog : открывает
+@enduml
